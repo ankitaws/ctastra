@@ -1,12 +1,6 @@
-FROM node:16-alpine AS builder
-ENV NODE_ENV production
+FROM node:12-alpine
+RUN yum install -y
 WORKDIR /app
-COPY package.json .COPY package-lock.json .
-RUN npm i --production
 COPY . .
-RUN npm run build
-FROM nginx:stable-alpine as runner
-ENV NODE_ENV production
-COPY --from=builder /app/build /usr/share/nginx/htmlCOPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "src/index.js"]
+EXPOSE 8080
